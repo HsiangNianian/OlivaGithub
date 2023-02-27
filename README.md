@@ -1,5 +1,6 @@
 OlivaGithub
 ===========
+[![CI](https://github.com/HsiangNianian/OlivaGithub/actions/workflows/ci.yml/badge.svg)](https://github.com/HsiangNianian/OlivaGithub/actions/workflows/ci.yml)
 > 利用webhook实时监控你的Github仓库
 
 注意：插件仅适用**OlivOS 3.3.9+**
