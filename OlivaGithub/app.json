@@ -1,0 +1,33 @@
+{
+    "name" : "Github webhooks",
+    "author" : "简律纯",
+    "namespace" : "OlivaGithub",
+    "info" : "基本信息:\n一个利用webhooks实时监控Github仓库的插件,在插件菜单点击【开启】即可开始.\n\n配置说明:\n你可能需要修改插件配置文件夹内config.json文件.\n\n个性化:\n根据提供的模板修改对应事件的值,需符合github webhooks doc注明的规范.",
+    "priority" : 30000,
+    "svn" : "π",
+    "version" : "3.141",
+    "compatible_svn" : 100,
+    "message_mode" : "olivos_string",
+    "support" : [
+        {
+            "sdk" : "onebot",
+            "platform" : "qq",
+            "model" : "all"
+        },
+        {
+            "sdk" : "all",
+            "platform" : "all",
+            "model" : "all"
+        }
+    ],
+    "menu_config": [
+        {
+            "title": "开启",
+            "event": "OlivaGithub_on"
+        },
+        {
+            "title": "关闭(这是一个装饰)",
+            "event": "OlivaGithub_off"
+        }
+    ]
+}
