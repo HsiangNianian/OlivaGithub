@@ -1,0 +1,33 @@
+{
+    "name" : "OlivOS插件默认模板",
+    "author" : "OlivOS-Team",
+    "namespace" : "OlivOSPluginTemplate",
+    "info" : "这是OlivOS官方插件模板，而这是一条有关插件的简介。",
+    "priority" : 30000,
+    "svn" : 1,
+    "version" : "1.0.0",
+    "compatible_svn" : 100,
+    "message_mode" : "olivos_string",
+    "support" : [
+        {
+            "sdk" : "onebot",
+            "platform" : "qq",
+            "model" : "all"
+        },
+        {
+            "sdk" : "all",
+            "platform" : "all",
+            "model" : "all"
+        }
+    ],
+    "menu_config": [
+        {
+            "title": "插件菜单1",
+            "event": "OlivOSPluginTemplate_Menu_001"
+        },
+        {
+            "title": "插件菜单2",
+            "event": "OlivOSPluginTemplate_Menu_002"
+        }
+    ]
+}
