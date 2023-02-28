@@ -127,6 +127,26 @@ OlivaGithub
 
 表达嵌套关系均用`xxx[xxx][xxx]`表示。
 
+高级用法
+--------------
+要想根据事件的`action`自定义对应消息，可以这样视情况修改源码和配置文件（这里使用`star`事件举例）。
+```python
+@webhook.hook("star")
+        def on_fork(data):
+            logg(json.dumps(data))
+            repost(obj=config['star'][data['action']], dic=data)
+```
+
+配置文件`config.py`
+```json
+{
+  star": {
+    "created": "{sender[login]} starred {repository[name]}",
+    "deleted": "{sender[login]} unstarred {repository[name]}"
+  }
+}
+```
+
 协议
 ----
 如果想进行一些不同`action`的个性化操作可以更改源码。
