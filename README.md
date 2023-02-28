@@ -166,6 +166,46 @@ def on_member(data):
 
 > 说明：对于暂时弃用的事件，可以在其事件名称前加一个`_`来屏蔽掉。
 
+高级用法
+-------
+这里用`push`事件的多个`commits`情况做举例。
+原有配置只会通报最新的那个`commit`的标题，要想做到通报这次`push`时的所有`commits`，可以这样：
+
+1. 修改`config.json`，将尾部的通报最新`commit`标题参数删去。
+```json
+{
+"push": "{pusher[name]} pushed {ref} in \"{repository[full_name]}\"\n"
+}
+```
+2. 修改`main.py`内对应`repost()`函数，我们在这里添加一个`string`参数作为附加文本。
+```python
+def repost(obj: dict, dic: dict,string: str = ""):
+    try:
+        if isinstance(obj,dict):
+            for qq in config['sent']['private']:
+                plugin_event.send("private", qq, obj[dic['action']].format(**dic)+string)
+            for group in config['sent']['group']:
+                plugin_event.send("group", group, obj[dic['action']].format(**dic)+string)
+        elif isinstance(obj,str):
+            for qq in config['sent']['private']:
+                plugin_event.send("private", qq, obj.format(**dic)+string)
+            for group in config['sent']['group']:
+                plugin_event.send("group", group, obj.format(**dic)+string)
+    except:
+        pass
+```
+
+3. 修改`main.py`内对应`push`事件的handle函数,给`push`事件添加一个由`commits`列表组成的字符串。
+```python
+@webhook.hook("push")
+def on_push(data):
+	logg(json.dumps(data))
+	string = '\n--------\n'.join([commit['message'] for commit in data["commits"]])
+	repost(obj=config['push'], dic=data,string=string)
+```
+
+4. 保存，重载，开启，完美输出。
+
 协议
 ----
 如果想进行一些不同`action`的个性化操作可以更改源码。
