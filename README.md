@@ -1,10 +1,9 @@
 OlivaGithub
 ===========
-[![CI](https://github.com/HsiangNianian/OlivaGithub/actions/workflows/ci.yml/badge.svg)](https://github.com/HsiangNianian/OlivaGithub/actions/workflows/ci.yml)
-<img src="https://img.shields.io/github/release/HsiangNianian/OlivaGithub.svg" alt="Latest version" />
+[![CI](https://github.com/HsiangNianian/OlivaGithub/actions/workflows/ci.yml/badge.svg)](https://github.com/HsiangNianian/OlivaGithub/actions/workflows/ci.yml) [![](https://img.shields.io/github/release/HsiangNianian/OlivaGithub.svg)](https://github.com/HsiangNianian/OlivaGithub/releases)
 > 利用webhook实时监控你的Github仓库
 
-注意：插件仅适用**OlivOS 3.3.9+**
+注意：插件编写测试时使用**OlivOS 3.3.9+**，低版本可能不支持。[仓库地址](https://github.com/HsiangNianian/OlivaGithub/)，欢迎[提交ISSUE](https://github.com/HsiangNianian/OlivaGithub/issues/new)。
 
 插件特性
 -------
