@@ -65,17 +65,29 @@ class Event(object):
             ),
             Proc.log
         )
-
-        def repost(obj: str, dic: dict):
-            if obj:
-                for qq in config['sent']['private']:
-                    plugin_event.send("private", qq, obj.format(**dic))
-                for group in config['sent']['group']:
-                    plugin_event.send("group", group, obj.format(**dic))
-
+        
+        def repost(obj: dict, dic: dict):
+            try:
+                if isinstance(obj,dict):
+                    for qq in config['sent']['private']:
+                        plugin_event.send("private", qq, obj[dic['action']].format(**dic))
+                    for group in config['sent']['group']:
+                        plugin_event.send("group", group, obj[dic['action']].format(**dic))
+                elif isinstance(obj,str):
+                    for qq in config['sent']['private']:
+                        plugin_event.send("private", qq, obj.format(**dic))
+                    for group in config['sent']['group']:
+                        plugin_event.send("group", group, obj.format(**dic))
+            except:
+                pass
         @app.route("/")
         def hello_world():
             return "<h1>Hi,I'm Listening...<h1>"
+
+        @webhook.hook("ping")
+        def on_member(data):
+            logg(json.dumps(data))
+            repost(obj=config['ping'], dic=data)
 
         @webhook.hook("member")
         def on_member(data):
@@ -90,7 +102,7 @@ class Event(object):
         @webhook.hook("star")
         def on_star(data):
             logg(json.dumps(data))
-            repost(obj=config['star'][data['action']], dic=data)
+            repost(obj=config['star'], dic=data)
 
         @webhook.hook("issues")
         def on_issue(data):
