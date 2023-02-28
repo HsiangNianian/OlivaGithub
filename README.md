@@ -19,7 +19,7 @@ OlivaGithub
 
 配置示例
 -------
-这是`./plugin/conf/OlivaGithub/config.json`的一个示例。
+这是`./plugin/conf/OlivaGithub/config.json`的一个示例。通常来说`host`默认`0.0.0.0`，`port`默认`3000`，`path`默认`webhook`,你可以在配置文件里修改。
 ```json
 {
     "bot": {
