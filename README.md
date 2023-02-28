@@ -39,30 +39,41 @@ OlivaGithub
             10005856
         ]
     },
-    "star": "{sender[login]} starred {repository[name]}",
-    "issues": "{sender[login]} {action} issue #{issue[number]} in \"{repository[full_name]}\"",
-    "issue_comment": "{sender[login]} commented on issue #{issue[number]} in \"{repository[full_name]}\"\n",
-    "commit_comment": "{comment[user][login]} commented on \"{comment[commit_id]}\" in \"{repository[full_name]}\"",
+	"_star": {
+		"deleted": "{sender[login]} unstarred \"{repository[name]}\" (Total {repository[stargazers_count]} stargazers)"
+	},
+    "issues": {
+		"opened": "{sender[login]} {action} issue #{issue[number]} in \"{repository[full_name]}\"\n\"{issue[title]}\"\n{issue[body]}",
+		"closed": "{sender[login]} {action} issue #{issue[number]} in \"{repository[full_name]}\""
+	},
+    "issue_comment": {
+		"created": "{sender[login]} commented on issue #{issue[number]} in \"{repository[full_name]}\"\n{comment[body]}"
+	},
+    "commit_comment": "{comment[user][login]} commented on \"{comment[commit_id]}\" in \"{repository[full_name]}\"\n{comment[body}",
     "create": "{sender[login]} created {ref_type} ({ref}) in \"{repository[full_name]}\"",
     "delete": "{sender[login]} deleted {ref_type} ({ref}) in \"{repository[full_name]}\"",
     "deployment": "{sender[login]} deployed {deployment[ref]} to \"{deployment[environment]}\" in \"{repository[full_name]}\"",
-    "deployment_status": "deployment of {deployement[ref]} to \"{deployment[environment]}\" \"{deployment_status[state]}\" in \"{repository[full_name]}\"",
-    "fork": "{forkee[owner][login]} forked {forkee[name]}",
+    "_deployment_status": "deployment of {deployement[ref]} to \"{deployment[environment]}\" \"{deployment_status[state]}\" in \"{repository[full_name]}\"",
+    "fork": "\"{forkee[owner][login]}\" forked \"{forkee[name]}\" (Total {repository[forks_count]} forkee)",
     "gollum": "{sender[login]} edited wiki pages in \"{repository[full_name]}\"",
     "member": "{sender[login]} {action} member {member[login]} in \"{repository[full_name]}\"",
     "membership": "{sender[login]} {action} member {member[login]} to team \"{team[name]} in {repository[full_name]}\"",
     "page_build": "{sender[login]} built pages in \"{repository[full_name]}\"",
     "ping": "ping from {sender[login]}",
     "public": "{sender[login]} publicized \"{repository[full_name]}\"",
-    "pull_request": "{sender[login]} {action} pull #{pull_request[number]} in \"{repository[full_name]}\"",
+    "pull_request": {
+		"opened": "{sender[login]} {action} pull #{pull_request[number]} in \"{repository[full_name]}\"\n\"{pull_request[title]}\"\n{pull_request[body]}"
+	},
     "pull_request_review": "{sender[login]} {action} {review[state]} \"review on pull #{pull_request[number]} in \"{repository[full_name]}\"",
     "pull_request_review_comment": "{comment[user][login]} {action} comment \"on pull #{pull_request[number]} in \"{repository[full_name]}\"",
-    "push": "{pusher[name]} pushed {ref} in \"{repository[full_name]}\"",
+    "push": "{pusher[name]} pushed {ref} in \"{repository[full_name]}\"\n{comments[message]}",
     "release": "{release[author][login]} {action} {release[tag_name]} in \"{repository[full_name]}\"",
     "repository": "{sender[login]} {action} repository \"{repository[full_name]}\"",
-    "status": "{sender[login]} set {sha} status to {state} in \"{repository[full_name]}\"",
+    "status": {
+		"success": "{sender[login]} set {sha} status to {state} in \"{repository[full_name]}\""
+	},
     "team_add": "{sender[login]} added repository {repository[full_name]} to team \"{team[name]}\"",
-    "watch": "{sender[login]} {action} watch in repository \"{repository[full_name]}\""
+    "watch": "{sender[login]} {action} watch in repository \"{repository[full_name]}\"(Total {repository[stargazers_count]} stargazers)"
 }
 ```
 
@@ -123,29 +134,37 @@ OlivaGithub
 
 -------
 
-其余键,均为Github Repo Webhook发送的事件名称，具体可参考[Webhook events and payloads](https://docs.github.com/zh/webhooks-and-events/webhooks/webhook-events-and-payloads)。
+消息事件
+-------
+所有webhook事件的handle都由以下两部分组成
 
-表达嵌套关系均用`xxx[xxx][xxx]`表示。
-
-高级用法
---------------
-要想根据事件的`action`自定义对应消息，可以这样视情况修改源码和配置文件（这里使用`star`事件举例）。
 ```python
-@webhook.hook("star")
-        def on_fork(data):
-            logg(json.dumps(data))
-            repost(obj=config['star'][data['action']], dic=data)
+@webhook.hook(event_type)
+def on_member(data):
+    logg(json.dumps(data))
+    repost(obj=config[event_type], dic=data)
 ```
+> 该函数被写在`main.py`的`Event.init(plugin_event,Proc)`中，其中`event_type`是具体的事件，比如`push`，`star.created`。
 
-配置文件`config.py`
 ```json
 {
-  "star": {
-    "created": "{sender[login]} starred {repository[name]}",
-    "deleted": "{sender[login]} unstarred {repository[name]}"
-  }
+    "event_type": "xxx"
 }
 ```
+这是配置文件`config.json`内的以事件名称为键、回复消息为值的一段json，若`event_type`为`push`，那么当`push`事件发生时会发送值到目标群/好友。它还允许有以下变体：
+```json
+{
+    "event_type": {
+        "action1": "xxx",
+        "action2": "xxx"
+    }
+}
+```
+这样填写后会在指定事件的指定行为发生后发送消息。
+
+配置文件的值均用字符串表示，其中允许用`{}`代表webhook发送json的字段，允许使用`[]`索引下级键，比如`{sender[login]}`。
+
+> 说明：对于暂时弃用的事件，可以在其事件名称前加一个`_`来屏蔽掉。
 
 协议
 ----
