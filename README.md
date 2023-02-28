@@ -140,7 +140,7 @@ OlivaGithub
 配置文件`config.py`
 ```json
 {
-  star": {
+  "star": {
     "created": "{sender[login]} starred {repository[name]}",
     "deleted": "{sender[login]} unstarred {repository[name]}"
   }
