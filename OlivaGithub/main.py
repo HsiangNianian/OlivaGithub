@@ -199,9 +199,9 @@ class Event(object):
             logg(json.dumps(data))
             repost(obj=config['watch'], dic=data)
 
-    def menu(plugin_event, Proc):  # type: ignore
-        if plugin_event.data.namespace == 'OlivaGithub':  # type: ignore
-            if plugin_event.data.event == 'OlivaGithub_on':  # type: ignore
+    def menu(self, Proc):  # type: ignore
+        if self.data.namespace == 'OlivaGithub':  # type: ignore
+            if self.data.event == 'OlivaGithub_on':  # type: ignore
                 config = json.loads(open(Config.file_path, "r").read())
                 try:
                     app.run(host="0.0.0.0", port=3000)  # type: ignore[int]
@@ -209,8 +209,6 @@ class Event(object):
                         f"flask Already Runns On {config['settings']['host']}{config['settings']['path']}:{config['settings']['port']}!")
                 except:
                     logg("Already On!!")
-            elif plugin_event.data.event == 'OlivaGithub_off':  # type: ignore
-                pass
 
 # # 对字典降级处理
 # def flatten_dict(d):

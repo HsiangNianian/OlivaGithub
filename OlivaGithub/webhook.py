@@ -103,7 +103,7 @@ def _get_header(key):
     try:
         return request.headers[key]
     except KeyError:
-        abort(400, "Missing header: " + key)
+        abort(400, f"Missing header: {key}")
 
 
 EVENT_DESCRIPTIONS = {
