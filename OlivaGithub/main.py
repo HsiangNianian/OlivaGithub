@@ -212,37 +212,5 @@ class Event(object):
             elif plugin_event.data.event == 'OlivaGithub_off':  # type: ignore
                 pass
 
-# # 对字典降级处理
-# def flatten_dict(d):
-#     result = {}
-#     for key, value in d.items():
-#         if isinstance(value, dict):
-#             value = flatten_dict(value)
-#             for subkey, subvalue in value.items():
-#                 result[key + '.' + subkey] = subvalue
-#         else:
-#             result[key] = value
-#     # results = {'res':{}}
-#     # for key,value in result.items(): results['res'][key] = value
-#     return result
-
-
 def logg(msg, level=2):
     GlobalProc.log(level, f"[OlivaGithub] > {msg}")  # type: ignore
-
-# # 使字典可以使用点表示法，暂时弃用
-# class DotDict(dict):
-#     def __init__(self, *args, **kwargs):
-#         dict.__init__(self, *args, **kwargs)
-#         self.__dict__ = self
-
-#     def toDotDict(data):
-#         if isinstance(data, dict):
-#             for k, v in data.items():
-#                 if isinstance(v, dict):
-#                     data[k] = DotDict(v)
-#                     DotDict.toDotDict(data[k])
-#         else:
-#             return data
-
-#         return DotDict(data)
