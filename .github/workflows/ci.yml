@@ -11,6 +11,7 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v5
+        
       - name: Pack
         run: |
           if [ ! $PACK_NAME ]; then
@@ -19,11 +20,13 @@ jobs:
           echo "PACK_NAME=$PACK_NAME" >> $GITHUB_ENV
           cd $PACK_NAME
           zip -r ../$PACK_NAME.opk ./
+          
       - name: Upload
         uses: actions/upload-artifact@v4
         with:
           name: Artifacts
           path: ${{ env.PACK_NAME }}.opk
+          
       - name: 读取当前版本号
         id: version
         uses: ashley-taylor/read-json-property-action@v1.0
@@ -38,22 +41,23 @@ jobs:
           path: ./description.txt
 
       - name: 创建GitHub Release
-       id: create_release
-       uses: actions/create-release@latest
-       env:
-         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-       with:
-         tag_name: v${{steps.version.outputs.value}}
-         release_name: v${{steps.version.outputs.value}}
-         # body: {{steps.description.outputs.content}}
-         draft: true
-         prerelease: false
+        id: create_release
+        uses: actions/create-release@latest
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+           tag_name: v${{steps.version.outputs.value}}
+           release_name: v${{steps.version.outputs.value}}
+           # body: {{steps.description.outputs.content}}
+           draft: true
+           prerelease: false
+           
       - name: 上传opk文件
-       uses: actions/upload-release-asset@v1.0.1
-       env:
-         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-       with:
-         upload_url: ${{ steps.create_release.outputs.upload_url }} 
-         asset_path: ${{ env.PACK_NAME }}.opk
-         asset_name: ${{ env.PACK_NAME }}.opk
-         asset_content_type: application/zip
+        uses: actions/upload-release-asset@v1.0.1
+        env:
+           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+           upload_url: ${{ steps.create_release.outputs.upload_url }} 
+           asset_path: ${{ env.PACK_NAME }}.opk
+           asset_name: ${{ env.PACK_NAME }}.opk
+           asset_content_type: application/zip
