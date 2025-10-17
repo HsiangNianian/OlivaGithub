@@ -19,12 +19,11 @@ limitations under the License.
 '''
 
 
-PKG_NAME: str = "OlivaGithub"
-port: str = '3000'
-host: str = "0.0.0.0"
-path: str = "/webhook"
-file_name: str = "config.json"
-file_path: str = f"./plugin/conf/{PKG_NAME}/{file_name}"
+PKG_NAME = "OlivaGithub"
+port = 3000
+host = "0.0.0.0"
+file_name = "config.json"
+file_path = f"./plugin/conf/{PKG_NAME}/{file_name}"
 default_config = {
     "bot": {},
     "settings": {},
@@ -53,4 +52,5 @@ default_config = {
     "status": "{sender[login]} set {sha} status to {state} in \"{repository[full_name]}\"",
     "team_add": "{sender[login]} added repository {repository[full_name]} to team \"{team[name]}\"",
     "watch": "{sender[login]} {action} watch in repository \"{repository[full_name]}\"",
+
 }
