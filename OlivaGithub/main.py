@@ -35,11 +35,10 @@ class Event(object):
     def init(plugin_event, Proc):  # type: ignore
         global GlobalProc
         GlobalProc = Proc
+         
+        if not os.path.exists("./plugin/conf/{Config.PKG_NAME}"): 
+            os.makedirs("./plugin/conf/{Config.PKG_NAME}")
 
-        try:
-            os.mkdir(f"./plugin/conf/{Config.PKG_NAME}")
-        except:
-            pass
         config = Config.default_config
         config['bot'] = {'hash': list(Proc.Proc_data['bot_info_dict'])[0]}
         config['settings'] = {
@@ -204,13 +203,14 @@ class Event(object):
             if plugin_event.data.event == 'OlivaGithub_on':  # type: ignore
                 config = json.loads(open(Config.file_path, "r").read())
                 try:
-                    app.run(host="0.0.0.0", port=3000)  # type: ignore[int]
+                    app.run(host=config['settings']['host'], port=config['settings']['port'])  # type: ignore[int]
                     logg(
                         f"flask Already Runns On {config['settings']['host']}{config['settings']['path']}:{config['settings']['port']}!")
-                except:
-                    logg("Already On!!")
+                except Exception as e:
+                    logg(f"{e!r}: {e}")
             elif plugin_event.data.event == 'OlivaGithub_off':  # type: ignore
                 pass
 
 def logg(msg, level=2):
     GlobalProc.log(level, f"[OlivaGithub] > {msg}")  # type: ignore
+
