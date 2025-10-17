@@ -34,11 +34,11 @@ jobs:
           path: ./${{ env.PACK_NAME }}/app.json
           property: version
 
-      - name: 读取描述文件(若有）
-        id: description
-        uses: juliangruber/read-file-action@v1
-        with:
-          path: ./description.txt
+      # - name: 读取描述文件(若有）
+      #   id: description
+      #   uses: juliangruber/read-file-action@v1
+      #   with:
+      #     path: ./description.txt
 
       - name: 创建GitHub Release
         id: create_release
