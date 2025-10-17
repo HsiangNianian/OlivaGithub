@@ -24,8 +24,8 @@ jobs:
       - name: Upload
         uses: actions/upload-artifact@v4
         with:
-          name: Artifacts
-          path: ${{ env.PACK_NAME }}.opk
+          name: ${{ env.PACK_NAME }}-v${{steps.version.outputs.value}}a.opk
+          path: ./${{ env.PACK_NAME }}.opk
           
       - name: 读取当前版本号
         id: version
@@ -46,10 +46,10 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-           tag_name: v${{steps.version.outputs.value}}
-           release_name: v${{steps.version.outputs.value}}
+           tag_name: v${{steps.version.outputs.value}}a
+           release_name: v${{steps.version.outputs.value}}a
            # body: {{steps.description.outputs.content}}
-           draft: true
+           draft: false
            prerelease: false
            
       - name: 上传opk文件
@@ -58,5 +58,5 @@ jobs:
            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
            # upload_url: ${{ steps.create_release.outputs.upload_url }} 
-           path: ${{ env.PACK_NAME }}.opk
-           name: ${{ env.PACK_NAME }}.opk
+           path: ${{ env.PACK_NAME }}-v${{steps.version.outputs.value}}a.opk
+           name: ${{ env.PACK_NAME }}-v${{steps.version.outputs.value}}a.opk
