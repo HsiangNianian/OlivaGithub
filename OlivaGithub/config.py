@@ -55,5 +55,3 @@ default_config = {
     "watch": "{sender[login]} {action} watch in repository \"{repository[full_name]}\"",
 
 }
-
-
