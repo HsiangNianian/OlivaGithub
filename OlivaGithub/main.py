@@ -22,12 +22,9 @@ import OlivaGithub  # type: ignore
 import os
 from . import config as Config
 from .webhook import Webhook
-from flask import Flask
 import json
 
-app = Flask(__name__)
-
-webhook = Webhook(app)
+webhook = Webhook()
 GlobalProc = None
 
 
@@ -36,8 +33,8 @@ class Event(object):
         global GlobalProc
         GlobalProc = Proc
          
-        if not os.path.exists("./plugin/conf/{Config.PKG_NAME}"): 
-            os.makedirs("./plugin/conf/{Config.PKG_NAME}")
+        if not os.path.exists(f"./plugin/conf/{Config.PKG_NAME}"): 
+            os.makedirs(f"./plugin/conf/{Config.PKG_NAME}")
 
         config = Config.default_config
         config['bot'] = {'hash': list(Proc.Proc_data['bot_info_dict'])[0]}
@@ -79,9 +76,6 @@ class Event(object):
                         plugin_event.send("group", group, obj.format(**dic))
             except:
                 pass
-        @app.route("/")
-        def hello_world():
-            return "<h1>Hi,I'm Listening...<h1>"
 
         @webhook.hook("ping")
         def on_member(data):
@@ -197,15 +191,17 @@ class Event(object):
         def on_watch(data):
             logg(json.dumps(data))
             repost(obj=config['watch'], dic=data)
+        
+        webhook.set_config(config)
 
     def menu(plugin_event, Proc):  # type: ignore
         if plugin_event.data.namespace == 'OlivaGithub':  # type: ignore
             if plugin_event.data.event == 'OlivaGithub_on':  # type: ignore
                 config = json.loads(open(Config.file_path, "r").read())
                 try:
-                    app.run(host=config['settings']['host'], port=config['settings']['port'])  # type: ignore[int]
+                    webhook.run(host=config['settings']['host'], port=config['settings']['port'])
                     logg(
-                        f"flask Already Runns On {config['settings']['host']}{config['settings']['path']}:{config['settings']['port']}!")
+                        f"HTTP Server Already Runs On {config['settings']['host']}{config['settings']['path']}:{config['settings']['port']}!")
                 except Exception as e:
                     logg(f"{e!r}: {e}")
             elif plugin_event.data.event == 'OlivaGithub_off':  # type: ignore
@@ -213,4 +209,3 @@ class Event(object):
 
 def logg(msg, level=2):
     GlobalProc.log(level, f"[OlivaGithub] > {msg}")  # type: ignore
-
