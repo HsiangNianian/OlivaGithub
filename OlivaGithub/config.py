@@ -22,7 +22,7 @@ limitations under the License.
 PKG_NAME = "OlivaGithub"
 port = 3000
 host = "0.0.0.0"
-path = "/webhook
+path = "/webhook"
 file_name = "config.json"
 file_path = f"./plugin/conf/{PKG_NAME}/{file_name}"
 default_config = {
@@ -55,4 +55,5 @@ default_config = {
     "watch": "{sender[login]} {action} watch in repository \"{repository[full_name]}\"",
 
 }
+
 
